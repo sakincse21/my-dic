@@ -29,12 +29,12 @@ function App() {
         .then(res => res.json())
         .then(data => {
           if (!(data.title)) {
-            setPhonetics(data[0].phonetics);
+            const newPhonetics = data[0].phonetics;
+            setPhonetics(newPhonetics);
             setResult(data[0]);
             setMeanings(data[0].meanings);
-            if (phonetics[0]) {
-              setAudio((phonetics.find(element => (element.audio !== ''))).audio);
-            }
+            const audioURL = newPhonetics.find(element => (element.audio !== ''))?.audio || '';
+            setAudio(audioURL);
           } else {
             setNotFound(data);
           }
@@ -50,9 +50,9 @@ function App() {
     }
   }
 
-  useEffect(()=>{
-    
-  },[])
+  useEffect(() => {
+
+  }, [])
 
   const playAudio = () => {
     try {
@@ -81,7 +81,7 @@ function App() {
           <div className="resultArea">
             <div className="wordInfo d-flex justify-content-between align-items-baseline">
               <h2>{result.word}</h2>
-              {(audio!=='') ? <span><img src={speaker} alt="listen" onClick={playAudio} /></span> : <span></span>}
+              {(audio !== '') ? <span><img src={speaker} alt="listen" onClick={playAudio} /></span> : <span></span>}
             </div>
             <div style={{ color: 'gray' }}>
               {result.phonetic}
