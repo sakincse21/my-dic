@@ -13,6 +13,8 @@
     padding: 7px;
     font-size: larger;
     background-color: rgb(230, 238, 245);
+    max-width: 240px;
+    margin: 5px 0;
 }
 .searchArea button{
     border: none;
@@ -21,6 +23,7 @@
     color: white;
     background-color: rgb(51, 82, 51);
     border-radius: 3px;
+    margin: 5px 0;
 }
 .wordInfo{
     margin-top: 50px;

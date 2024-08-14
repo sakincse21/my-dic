@@ -1,14 +1,14 @@
 import '/node_modules/bootstrap/dist/css/bootstrap.css';
 import './App.css';
-import { useState } from 'react';
-// import speaker from './img/speaker.png';
+import { useEffect, useState } from 'react';
+import speaker from './img/speaker.png';
 
 function App() {
   const [word, setWord] = useState('');
   const [result, setResult] = useState({});
   const [meanings, setMeanings] = useState([]);
   const [phonetics, setPhonetics] = useState([]);
-  // const [audio, setAudio] = useState('');
+  const [audio, setAudio] = useState('');
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState({});
   const handleChange = (e) => {
@@ -21,18 +21,20 @@ function App() {
   const fetchDef = () => {
     try {
       setNotFound('');
+      setPhonetics([]);
+      setAudio('');
       setLoading(true);
       console.log('clicked', word);
       fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
         .then(res => res.json())
         .then(data => {
           if (!(data.title)) {
+            setPhonetics(data[0].phonetics);
             setResult(data[0]);
             setMeanings(data[0].meanings);
-            setPhonetics(data[0].phonetics);
-            // if (phonetics[0]) {
-            //   setAudio(phonetics[0].audio);
-            // }
+            if (phonetics[0]) {
+              setAudio((phonetics.find(element => (element.audio !== ''))).audio);
+            }
           } else {
             setNotFound(data);
           }
@@ -48,14 +50,21 @@ function App() {
     }
   }
 
-  // const playAudio = () => {
-  //   try {
-  //     let ding = new Audio(audio);
-  //     ding.play();
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+  useEffect(()=>{
+    
+  },[])
+
+  const playAudio = () => {
+    try {
+      if (audio !== '') {
+        console.log(audio);
+        let ding = new Audio(audio);
+        ding.play();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
 
   return (
@@ -72,7 +81,7 @@ function App() {
           <div className="resultArea">
             <div className="wordInfo d-flex justify-content-between align-items-baseline">
               <h2>{result.word}</h2>
-              {/* {(audio) ? <span><img src={speaker} alt="listen" onClick={playAudio} /></span> : <span></span>} */}
+              {(audio!=='') ? <span><img src={speaker} alt="listen" onClick={playAudio} /></span> : <span></span>}
             </div>
             <div style={{ color: 'gray' }}>
               {result.phonetic}
